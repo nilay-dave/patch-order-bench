@@ -1,0 +1,46 @@
+site_name: patch-order-bench
+site_description: A benchmark for the order a patch programme works in.
+site_url: https://__GITHUB_USERNAME__.github.io/patch-order-bench/
+repo_url: https://github.com/__GITHUB_USERNAME__/patch-order-bench
+repo_name: __GITHUB_USERNAME__/patch-order-bench
+edit_uri: ""
+
+theme:
+  name: material
+  features:
+    - navigation.sections
+    - navigation.top
+    - content.code.copy
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
+
+nav:
+  - Home: index.md
+  - Results: results.md
+  - Limitations: limitations.md
+  - Sources: sources.md
+  - Decisions:
+      - Exploitability ordering: adr/adr-001-exploitability-ordering.md
+      - No persistence layer: adr/adr-002-no-persistence-layer.md
+      - Simulation methodology: adr/adr-003-simulation-methodology.md
+
+markdown_extensions:
+  - admonition
+  - tables
+  - toc:
+      permalink: true
+  - pymdownx.highlight
+  - pymdownx.superfences
+
+strict: true
