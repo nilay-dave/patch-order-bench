@@ -114,9 +114,7 @@ def coverage_chart(
     axes.set_ylabel("share of known exploited findings covered (%)")
     # pad leaves room for the subtitle, which otherwise lands on top of the
     # title: set_title places text at the axes top whatever else is there.
-    axes.set_title(
-        title or "Coverage of known exploited findings by remediation order", fontsize=11, pad=22
-    )
+    axes.set_title(title or "Coverage of known exploited findings by remediation order", fontsize=11, pad=22)
     axes.text(
         0.5,
         1.012,

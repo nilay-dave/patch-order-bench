@@ -123,9 +123,7 @@ def compare(spec: CorpusSpec, capacity: Capacity, seeds: int) -> dict:
             "summary": ORDERINGS[name].summary,
             "blind_to": ORDERINGS[name].blind_to,
             "kev_coverage": round(statistics.fmean(collected["kev_coverage"]), 4),
-            "kev_coverage_spread": round(
-                max(collected["kev_coverage"]) - min(collected["kev_coverage"]), 4
-            ),
+            "kev_coverage_spread": round(max(collected["kev_coverage"]) - min(collected["kev_coverage"]), 4),
             "window_attainment": round(statistics.fmean(collected["window_attainment"]), 4),
             "exposure_removed": round(statistics.fmean(collected["exposure_removed"]), 4),
             "effort_to_90pc_kev": _summarise(collected["effort_to_90pc_kev"]),
@@ -141,12 +139,8 @@ def compare(spec: CorpusSpec, capacity: Capacity, seeds: int) -> dict:
             "mean_realized_rank_correlation": round(
                 statistics.fmean(c["realized_cvss_epss_rank_correlation"] for c in corpora), 3
             ),
-            "mean_share_epss_above_0_1": round(
-                statistics.fmean(c["share_epss_above_0_1"] for c in corpora), 4
-            ),
-            "mean_already_past_window": round(
-                statistics.fmean(c["findings_already_past_window"] for c in corpora)
-            ),
+            "mean_share_epss_above_0_1": round(statistics.fmean(c["share_epss_above_0_1"] for c in corpora), 4),
+            "mean_already_past_window": round(statistics.fmean(c["findings_already_past_window"] for c in corpora)),
             "mean_window_attainment_ceiling": round(statistics.fmean(ceilings), 1),
         },
         "orderings": results,
@@ -161,9 +155,11 @@ def experiment_headline(args) -> dict:
         cvss_epss_correlation=args.correlation,
     )
     result = compare(spec, DEFAULT_CAPACITY, args.seeds)
-    print(f"  corpus: {result['corpus']['findings']:,} findings, "
-          f"{result['corpus']['mean_kev_findings']:.0f} known exploited, "
-          f"{result['corpus']['mean_already_past_window']:,} already past window")
+    print(
+        f"  corpus: {result['corpus']['findings']:,} findings, "
+        f"{result['corpus']['mean_kev_findings']:.0f} known exploited, "
+        f"{result['corpus']['mean_already_past_window']:,} already past window"
+    )
     print(f"  window attainment ceiling at this rate: {result['corpus']['mean_window_attainment_ceiling']:.0f}")
     print()
     print(f"  {'ordering':16s} {'kev cov':>8s} {'effort->90%':>12s} {'window att':>11s} {'exposure':>9s}")
@@ -183,8 +179,9 @@ def experiment_sweep(args) -> dict:
     """Does the conclusion survive the parameter nothing here knows?"""
     rows = []
     print(f"  capacity held at {CAPACITY_SHARE_OF_BACKLOG:.0%} of the backlog, so the random baseline is comparable")
-    print(f"  {'correlation':>11s} {'realized':>9s}  "
-          f"{'cvss kev':>9s} {'kev-epss':>9s} {'random':>8s}  {'verdict':>22s}")
+    print(
+        f"  {'correlation':>11s} {'realized':>9s}  {'cvss kev':>9s} {'kev-epss':>9s} {'random':>8s}  {'verdict':>22s}"
+    )
     for rho in args.sweep:
         spec = CorpusSpec(
             findings=args.sweep_findings,

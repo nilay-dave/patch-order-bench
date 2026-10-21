@@ -6,9 +6,9 @@ it also appears in the README's tech stack table it is a capability the project
 advertises and does not have.
 
 Some dependencies are legitimately not imported anywhere. pyarrow is pandas's
-parquet engine: nothing imports it, pandas raises ImportError without it. Those
-are declared in INDIRECT below with the reason, so "not imported" and "not
-needed" stay distinguishable.
+command rather than imported as a library. Those are declared in INDIRECT
+below with the reason, so "not imported" and "not needed" stay
+distinguishable.
 
 Usage:
     python tools/check_dependencies.py
@@ -33,7 +33,6 @@ MODULE_NAME = {
 # Dependencies nothing imports directly, with the reason each is required.
 INDIRECT = {
     "ruff": "a linter invoked as a command, not a library",
-    "pyarrow": "pandas uses it as the parquet engine; pandas raises ImportError without it",
 }
 
 
@@ -48,7 +47,8 @@ def declared() -> list[str]:
 def imported() -> set[str]:
     result = subprocess.run(
         ["grep", "-rhoE", r"^\s*(import|from) [a-zA-Z0-9_]+", *[str(ROOT / d) for d in SEARCH if (ROOT / d).is_dir()]],
-        capture_output=True, text=True,
+        capture_output=True,
+        text=True,
     )
     return {line.split()[1].split(".")[0] for line in result.stdout.splitlines() if len(line.split()) > 1}
 

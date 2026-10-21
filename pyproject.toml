@@ -20,8 +20,6 @@ classifiers = [
   "Topic :: Security",
 ]
 dependencies = [
-  "pandas>=2.2",
-  "pyarrow>=15.0",
   "numpy>=1.26",
   "matplotlib>=3.8",
 ]

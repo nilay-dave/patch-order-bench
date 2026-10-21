@@ -10,9 +10,8 @@ generation is the single most expensive step in the pipeline: at 500,000 finding
 takes <!--number:runtime[2].generate_seconds-->7.57<!--/number--> seconds against
 <!--number:runtime[2].slowest_seconds-->2.88<!--/number--> for the slowest of the
 eight orderings. The benchmark regenerates a corpus once per seed per experiment,
-and pyarrow was already a dependency for reading scanner exports that ship as
-Parquet. Caching looked free, and it looked like it would pay for itself on the
-slowest thing here.
+and pandas and pyarrow were already declared as dependencies. Caching looked free,
+and it looked like it would pay for itself on the slowest thing here.
 
 ## Decision
 
@@ -50,7 +49,8 @@ show the tool does not fall over, not on the workload the benchmark runs.
 scanner export on disk, Parquet adds a conversion step and a second copy of the
 user's vulnerability data, which is a thing to secure and a thing to delete. Reading
 the CSV each time is slower and is nobody's bottleneck at the sizes a single
-scanner export reaches.
+scanner export reaches. `pob.corpus.load` reads it with the standard library's
+`csv` module.
 
 ## Consequences
 
@@ -59,8 +59,13 @@ scanner export reaches.
   runs.
 - Reproducibility comes from the seed, which is printed in every result and
   recorded in `docs/metrics.json`, rather than from a stored artefact.
-- pyarrow stays a dependency, for reading Parquet exports from scanners that
-  produce them. It is not used to write anything.
+- pandas and pyarrow are no longer dependencies. They were declared when this
+  project expected to use them and nothing ever imported them, which
+  `tools/check_dependencies.py` reported the first time it ran against a complete
+  tree. An earlier draft of this ADR asserted that pyarrow was kept deliberately
+  for reading Parquet scanner exports; that was a tidy explanation for a leftover,
+  and the check falsified it. Two unused transitive dependency trees left the
+  install.
 - If corpus generation ever becomes the bottleneck, the fix is to make the generator
   faster, which is a change with no correctness surface, rather than to remember
   more fields in a cache key.

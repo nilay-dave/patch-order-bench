@@ -227,8 +227,11 @@ def _optional_date(row: dict, column: str | None) -> dt.date | None:
     if not raw:
         return None
     # ISO first, then the two orderings a spreadsheet most often produces.
-    for parse in (dt.date.fromisoformat, lambda v: dt.datetime.strptime(v, "%m/%d/%Y").date(),
-                  lambda v: dt.datetime.strptime(v, "%d/%m/%Y").date()):
+    for parse in (
+        dt.date.fromisoformat,
+        lambda v: dt.datetime.strptime(v, "%m/%d/%Y").date(),
+        lambda v: dt.datetime.strptime(v, "%d/%m/%Y").date(),
+    ):
         try:
             return parse(raw[:10] if len(raw) >= 10 and parse is dt.date.fromisoformat else raw)
         except ValueError:

@@ -147,9 +147,7 @@ class TestFetching:
         from pob.feeds import fetch as module
 
         payloads = {"epss": gzip.compress(EPSS_FIXTURE), "kev": KEV_FIXTURE}
-        monkeypatch.setattr(
-            module, "_get", lambda url: payloads["epss"] if "epss" in url else payloads["kev"]
-        )
+        monkeypatch.setattr(module, "_get", lambda url: payloads["epss"] if "epss" in url else payloads["kev"])
         counts = fetch(tmp_path)
         assert counts == {"epss_rows": 3, "kev_rows": 2}
         assert (tmp_path / "epss.csv.gz").read_bytes() == payloads["epss"]

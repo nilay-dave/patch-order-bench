@@ -7,8 +7,8 @@ through prose:
     <!--number:audit.blind_technique_pct-->66.7<!--/number-->
 
 The value between the markers must equal the value at that dotted path in
-docs/metrics.json, which tools/collect_metrics.py regenerates from executed
-code. CI runs collect_metrics.py and then this script, so a number that drifts
+docs/metrics.json, which benchmark/run_benchmark.py regenerates from executed
+code. CI runs the benchmark and then this script, so a number that drifts
 breaks the build rather than quietly misleading a reader.
 
 Usage:
@@ -79,7 +79,7 @@ def documents(readme: Path) -> list[Path]:
 
 def check(readme: Path, metrics: Path) -> list[str]:
     if not metrics.exists():
-        return [f"{metrics} does not exist. Run tools/collect_metrics.py first."]
+        return [f"{metrics} does not exist. Run: make bench"]
 
     payload = json.loads(metrics.read_text(encoding="utf-8"))
     failures: list[str] = []
@@ -101,8 +101,7 @@ def check(readme: Path, metrics: Path) -> list[str]:
             path = marker.group(1)
             if path not in parsed:
                 failures.append(
-                    f"{where}: the marker {path!r} cannot be read as a metrics path, "
-                    "so its number was never checked"
+                    f"{where}: the marker {path!r} cannot be read as a metrics path, so its number was never checked"
                 )
 
         for match in PATTERN.finditer(text):
@@ -119,9 +118,7 @@ def check(readme: Path, metrics: Path) -> list[str]:
                 published_number = float(published_clean)
                 measured_number = float(measured)
                 if abs(published_number - measured_number) > tolerance_for(measured_number):
-                    failures.append(
-                        f"{where}: {path} says {published}, measured {normalise(measured)}"
-                    )
+                    failures.append(f"{where}: {path} says {published}, measured {normalise(measured)}")
             except (TypeError, ValueError):
                 if published != str(measured):
                     failures.append(f"{where}: {path} says {published!r}, measured {measured!r}")
@@ -144,8 +141,7 @@ def main() -> int:
         print(f"  FAIL  {failure}", file=sys.stderr)
     if failures:
         print(
-            f"\n{len(failures)} number(s) out of date. "
-            "Run make report and update the document.",
+            f"\n{len(failures)} number(s) out of date. Run: make bench, then make report",
             file=sys.stderr,
         )
         return 1

@@ -147,9 +147,7 @@ def parse_kev(payload: bytes) -> list[KevRow]:
         raise FeedError("KEV feed was empty")
 
     def column(*candidates: str) -> str | None:
-        normalised = {
-            name.lower().replace(" ", "").replace("_", ""): name for name in reader.fieldnames or []
-        }
+        normalised = {name.lower().replace(" ", "").replace("_", ""): name for name in reader.fieldnames or []}
         for candidate in candidates:
             found = normalised.get(candidate)
             if found is not None:
@@ -160,10 +158,7 @@ def parse_kev(payload: bytes) -> list[KevRow]:
     added_column = column("dateadded", "added")
     due_column = column("duedate", "due")
     if cve_column is None:
-        raise FeedError(
-            f"KEV feed has no CVE column; found {reader.fieldnames}. "
-            f"The published format carries cveID."
-        )
+        raise FeedError(f"KEV feed has no CVE column; found {reader.fieldnames}. The published format carries cveID.")
 
     rows: list[KevRow] = []
     for number, record in enumerate(reader, start=2):

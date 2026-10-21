@@ -48,11 +48,7 @@ class Outcome:
     @property
     def window_attainment(self) -> float:
         """Share of the attainable window compliance that was achieved."""
-        return (
-            self.in_scope_remediated_in_window / self.in_scope_attainable
-            if self.in_scope_attainable
-            else 0.0
-        )
+        return self.in_scope_remediated_in_window / self.in_scope_attainable if self.in_scope_attainable else 0.0
 
     @property
     def exposure_removed(self) -> float:
@@ -91,8 +87,7 @@ def attainable_in_window(corpus: Corpus, capacity: Capacity) -> list[Finding]:
         (
             finding
             for finding in corpus.findings
-            if corpus.vulnerabilities[finding.cve].cvss_severity.in_pci_scope
-            and corpus.days_remaining(finding) >= 0
+            if corpus.vulnerabilities[finding.cve].cvss_severity.in_pci_scope and corpus.days_remaining(finding) >= 0
         ),
         key=lambda finding: (corpus.days_remaining(finding), finding.finding_id),
     )
@@ -126,8 +121,7 @@ def score(
     in_window = [
         finding
         for finding in in_scope
-        if schedule.reached(finding)
-        and schedule.remediated_on[finding.finding_id] <= corpus.days_remaining(finding)
+        if schedule.reached(finding) and schedule.remediated_on[finding.finding_id] <= corpus.days_remaining(finding)
     ]
 
     total_exposure = float(sum(exposure_score(corpus, finding) for finding in corpus.findings))

@@ -75,9 +75,7 @@ def _erf(values: np.ndarray) -> np.ndarray:
     sign = np.sign(values)
     x = np.abs(values)
     t = 1.0 / (1.0 + _ERF_P * x)
-    series = t * (
-        _ERF_A[0] + t * (_ERF_A[1] + t * (_ERF_A[2] + t * (_ERF_A[3] + t * _ERF_A[4])))
-    )
+    series = t * (_ERF_A[0] + t * (_ERF_A[1] + t * (_ERF_A[2] + t * (_ERF_A[3] + t * _ERF_A[4]))))
     return sign * (1.0 - series * np.exp(-(x**2)))
 
 
@@ -192,9 +190,7 @@ class CorpusSpec:
         }
 
 
-def _epss_from_latent(
-    latent: np.ndarray, share_above: float, median: float = CHOSEN_MEDIAN_EPSS
-) -> np.ndarray:
+def _epss_from_latent(latent: np.ndarray, share_above: float, median: float = CHOSEN_MEDIAN_EPSS) -> np.ndarray:
     """Map a standard normal latent to EPSS through a fitted lognormal.
 
     Lognormal in the score, which is to say normal in log10 of it, fitted
@@ -262,9 +258,7 @@ def generate(spec: CorpusSpec) -> Corpus:
     epss = _epss_from_latent(exploitability, spec.share_epss_above_0_1)
     cvss = np.round(10.0 * _beta_quantile(_normal_cdf(cvss_latent), spec.cvss_beta_a, spec.cvss_beta_b), 1)
 
-    kev_score = spec.kev_latent_weight * exploitability + (
-        1.0 - spec.kev_latent_weight
-    ) * rng.standard_normal(count)
+    kev_score = spec.kev_latent_weight * exploitability + (1.0 - spec.kev_latent_weight) * rng.standard_normal(count)
     in_kev = kev_score >= np.quantile(kev_score, 1.0 - spec.kev_share)
 
     ages = np.minimum(rng.exponential(spec.patch_age_days_mean, size=count), spec.patch_age_days_max)
@@ -381,7 +375,5 @@ def describe_corpus(corpus: Corpus) -> dict:
         # came out the other side, and a reader comparing them should see both.
         "realized_cvss_epss_rank_correlation": round(realized, 3),
         "kev_cves_below_epss_0_1": int((kev & (epss < 0.1)).sum()),
-        "findings_already_past_window": sum(
-            1 for finding in corpus.findings if corpus.days_remaining(finding) < 0
-        ),
+        "findings_already_past_window": sum(1 for finding in corpus.findings if corpus.days_remaining(finding) < 0),
     }

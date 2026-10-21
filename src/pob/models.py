@@ -153,7 +153,5 @@ class Corpus:
         of a backlog was already out of compliance on day one.
         """
         vulnerability = self.vulnerabilities[finding.cve]
-        window = (
-            PCI_CRITICAL_WINDOW_DAYS if vulnerability.cvss_severity.in_pci_scope else PCI_OTHER_WINDOW_DAYS
-        )
+        window = PCI_CRITICAL_WINDOW_DAYS if vulnerability.cvss_severity.in_pci_scope else PCI_OTHER_WINDOW_DAYS
         return window - self.days_since_patch(finding)

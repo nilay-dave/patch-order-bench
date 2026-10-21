@@ -17,9 +17,7 @@ def build(*records):
     findings = []
     for index, (cvss, epss, kev, age) in enumerate(records):
         cve = f"CVE-2026-{index:04d}"
-        vulnerabilities[cve] = Vulnerability(
-            cve, cvss, epss, kev, TODAY - dt.timedelta(days=age)
-        )
+        vulnerabilities[cve] = Vulnerability(cve, cvss, epss, kev, TODAY - dt.timedelta(days=age))
         findings.append(Finding(f"F{index:03d}", cve, f"host-{index}", 0.5, TODAY))
     return Corpus(tuple(findings), vulnerabilities, as_of=TODAY)
 
@@ -35,9 +33,7 @@ class TestEveryOrderingIsAPermutation:
         assert {f.finding_id for f in ordered} == {f.finding_id for f in corpus.findings}
 
     def test_an_ordering_that_drops_findings_is_refused(self):
-        broken = Ordering(
-            name="broken", summary="", blind_to="", key=lambda corpus, capacity: corpus.findings[:-1]
-        )
+        broken = Ordering(name="broken", summary="", blind_to="", key=lambda corpus, capacity: corpus.findings[:-1])
         corpus = generate(CorpusSpec(findings=100, distinct_cves=50, seed=1))
         with pytest.raises(ValueError, match="must be a permutation"):
             broken(corpus, CAPACITY)

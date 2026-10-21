@@ -113,9 +113,7 @@ def check_history(report: Report) -> None:
     report.add(
         "subject length",
         PASS if not long_subjects else WEAK,
-        "all subjects 72 characters or fewer"
-        if not long_subjects
-        else f"{len(long_subjects)} over 72 characters",
+        "all subjects 72 characters or fewer" if not long_subjects else f"{len(long_subjects)} over 72 characters",
     )
 
     initial = [s for s in subjects if s.strip().lower() == "initial commit"]
@@ -126,8 +124,12 @@ def check_history(report: Report) -> None:
     )
 
     fix_bodies = git("log", "--format=%H%x1f%s%x1f%b%x1e").split("\x1e")
-    fixes = [entry for entry in fix_bodies if "\x1ffix" in f"\x1f{entry.split(chr(31))[1][:3]}" or
-             (len(entry.split("\x1f")) > 1 and entry.split("\x1f")[1].startswith("fix"))]
+    fixes = [
+        entry
+        for entry in fix_bodies
+        if "\x1ffix" in f"\x1f{entry.split(chr(31))[1][:3]}"
+        or (len(entry.split("\x1f")) > 1 and entry.split("\x1f")[1].startswith("fix"))
+    ]
     bodyless = [f for f in fixes if len(f.split("\x1f")) < 3 or not f.split("\x1f")[2].strip()]
     report.add(
         "fix commits explain themselves",
@@ -236,7 +238,9 @@ def check_numbers(report: Report) -> None:
             PASS if result.returncode == 0 else FAIL,
             "every published number matches a measured one"
             if result.returncode == 0
-            else result.stderr.strip().splitlines()[0] if result.stderr.strip() else "check failed",
+            else result.stderr.strip().splitlines()[0]
+            if result.stderr.strip()
+            else "check failed",
         )
     else:
         report.add("number check exists", FAIL, "tools/check_numbers.py is absent")
@@ -252,11 +256,7 @@ def check_language_mix(report: Report) -> None:
     # linguist-documentation and linguist-generated and had nothing that needed
     # forcing, which is the check being wrong rather than the repository.
     text = attributes.read_text(encoding="utf-8") if attributes.exists() else ""
-    marks = sorted({
-        word.split("=")[0]
-        for word in text.split()
-        if word.startswith("linguist-")
-    })
+    marks = sorted({word.split("=")[0] for word in text.split() if word.startswith("linguist-")})
     report.add(
         "gitattributes records a language decision",
         PASS if marks else FAIL,
@@ -313,9 +313,7 @@ def check_community(report: Report) -> None:
     report.add(
         "docs site configured",
         PASS if (ROOT / "mkdocs.yml").exists() else WEAK,
-        "mkdocs.yml present with a pages deploy workflow"
-        if (ROOT / "mkdocs.yml").exists()
-        else "no docs site",
+        "mkdocs.yml present with a pages deploy workflow" if (ROOT / "mkdocs.yml").exists() else "no docs site",
     )
 
 
@@ -329,9 +327,7 @@ def check_house_style(report: Report) -> None:
     if not checker.exists():
         report.add("no em dashes or en dashes", FAIL, "tools/check_dashes.py is absent")
     else:
-        result = subprocess.run(
-            [sys.executable, str(checker), *tracked], cwd=ROOT, capture_output=True, text=True
-        )
+        result = subprocess.run([sys.executable, str(checker), *tracked], cwd=ROOT, capture_output=True, text=True)
         first = result.stderr.strip().splitlines()[0] if result.stderr.strip() else "unknown"
         report.add(
             "no em dashes or en dashes",

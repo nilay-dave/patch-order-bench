@@ -241,9 +241,7 @@ def _command_chart(args: argparse.Namespace) -> int:
         assets=args.assets,
         cvss_epss_correlation=args.correlation,
     )
-    destination = coverage_chart(
-        spec, Capacity(per_week=args.per_week, weeks=args.weeks), args.out, seeds=args.seeds
-    )
+    destination = coverage_chart(spec, Capacity(per_week=args.per_week, weeks=args.weeks), args.out, seeds=args.seeds)
     print(f"wrote {destination}")
     return 0
 

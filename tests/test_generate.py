@@ -173,9 +173,7 @@ class TestDescribeCorpus:
         fail if the variance ever collapses, because that would mean the
         averaging had become unnecessary and the docs would be wrong."""
         shares = [
-            describe_corpus(generate(CorpusSpec(findings=5000, distinct_cves=1500, seed=seed)))[
-                "share_epss_above_0_1"
-            ]
+            describe_corpus(generate(CorpusSpec(findings=5000, distinct_cves=1500, seed=seed)))["share_epss_above_0_1"]
             for seed in range(8)
         ]
         assert max(shares) > min(shares) * 1.3, "if this fails, the seed averaging claim needs revisiting"

@@ -64,9 +64,7 @@ class TestWindows:
         """The detail most tooling gets wrong. A finding discovered on day 25
         of its window has five days left, not thirty."""
         released = TODAY - dt.timedelta(days=25)
-        corpus = Corpus(
-            (finding(),), {"CVE-2026-0001": vuln(released=released)}, as_of=TODAY
-        )
+        corpus = Corpus((finding(),), {"CVE-2026-0001": vuln(released=released)}, as_of=TODAY)
         assert corpus.days_since_patch(corpus.findings[0]) == 25
         assert corpus.days_remaining(corpus.findings[0]) == PCI_CRITICAL_WINDOW_DAYS - 25
 
