@@ -1,0 +1,19 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+.coverage
+coverage.xml
+htmlcov/
+public/
+# Fetched feeds and generated corpora. Neither is vendored: the feeds belong to
+# CISA and Cyentia, and a generated corpus is reproducible from its seed.
+.feeds/
+data/generated/
+benchmark/results/*.json
+!benchmark/results/.gitkeep
