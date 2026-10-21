@@ -1,0 +1,46 @@
+name: Bug report
+description: Something behaves differently from what the documentation says
+labels: [bug]
+body:
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened
+      description: The command you ran and what came back. Paste the output.
+      render: shell
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected instead
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: "`pob --version`, or the commit if you are running from a checkout"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: data
+    attributes:
+      label: What were you running it against
+      options:
+        - A generated corpus
+        - My own scanner export
+        - Not sure
+    validations:
+      required: true
+
+  - type: markdown
+    attributes:
+      value: >
+        If it is your own export, please do not paste it. A scanner export is a
+        list of what is unpatched on your estate. A description of the shape of
+        the problem, or a handful of rows with the identifiers removed, is
+        enough.

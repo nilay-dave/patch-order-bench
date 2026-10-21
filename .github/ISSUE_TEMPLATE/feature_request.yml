@@ -1,0 +1,35 @@
+name: Feature request
+description: Something this should do and does not
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: The problem
+      description: What you are trying to find out, and where this tool stops short.
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: What you have in mind
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: kind
+    attributes:
+      label: Does this involve
+      options:
+        - label: A new ordering (it will need a `summary` and a `blind_to`)
+        - label: A change to the corpus generator (new parameters are sourced or declared choices)
+        - label: A new metric
+        - label: None of these
+
+  - type: markdown
+    attributes:
+      value: >
+        Worth reading first: `docs/limitations.md` lists what this deliberately
+        does not do and, at the end, the four changes most likely to change its
+        conclusions.

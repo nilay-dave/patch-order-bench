@@ -1,0 +1,22 @@
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: monthly
+    commit-message:
+      prefix: "ci"
+
+  - package-ecosystem: pip
+    directory: "/"
+    schedule:
+      interval: monthly
+    commit-message:
+      prefix: "chore"
+    # Two runtime dependencies, numpy and matplotlib. Grouping them keeps a
+    # routine bump to one pull request and one CI run rather than two.
+    groups:
+      runtime:
+        patterns: ["numpy", "matplotlib"]
+      dev:
+        patterns: ["pytest*", "ruff"]

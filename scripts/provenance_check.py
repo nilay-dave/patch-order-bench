@@ -172,6 +172,21 @@ def check_releases(report: Report) -> None:
         )
 
 
+def read_or_report(report: Report, relative: str, label: str) -> str | None:
+    """Read a file, or record its absence as a finding.
+
+    Three call sites read README.md and pyproject.toml directly. A repository
+    without one is exactly the repository this audit exists to catch, and the
+    unguarded reads turned that finding into a traceback: the audit crashed
+    instead of reporting, and every check after the crash never ran.
+    """
+    path = ROOT / relative
+    if not path.is_file():
+        report.add(label, FAIL, f"{relative} is absent")
+        return None
+    return path.read_text(encoding="utf-8")
+
+
 def check_badges(report: Report) -> None:
     readme = ROOT / "README.md"
     if not readme.exists():
@@ -202,7 +217,9 @@ def check_badges(report: Report) -> None:
 
 
 def check_numbers(report: Report) -> None:
-    readme = (ROOT / "README.md").read_text(encoding="utf-8")
+    readme = read_or_report(report, "README.md", "published numbers are checked")
+    if readme is None:
+        return
     # Hyphens allowed, because a metric path keyed by check id contains them
     # and every check id in this project is hyphenated. The pattern here and
     # the one in tools/check_numbers.py had the same gap, and this audit
@@ -335,7 +352,9 @@ def check_house_style(report: Report) -> None:
             "clean across every tracked text file" if result.returncode == 0 else first,
         )
 
-    readme = (ROOT / "README.md").read_text(encoding="utf-8")
+    readme = read_or_report(report, "README.md", "readme opens with the project name")
+    if readme is None:
+        return
     first_line = next((line for line in readme.splitlines() if line.startswith("# ")), "")
     report.add(
         "readme opens with the project name",
@@ -352,7 +371,9 @@ def check_house_style(report: Report) -> None:
 
 def check_repo_metadata(report: Report) -> None:
     description = None
-    pyproject = (ROOT / "pyproject.toml").read_text(encoding="utf-8")
+    pyproject = read_or_report(report, "pyproject.toml", "package metadata")
+    if pyproject is None:
+        return
     match = re.search(r'^description = "(.+)"$', pyproject, re.MULTILINE)
     if match:
         description = match.group(1)

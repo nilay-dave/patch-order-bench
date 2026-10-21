@@ -1,0 +1,58 @@
+# Mirrors the fast half of `make check`. The benchmark and the test suite are
+# not here on purpose: a hook slow enough to be bypassed gets bypassed.
+repos:
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.6.9
+    hooks:
+      - id: ruff-format
+      - id: ruff
+        args: [--fix]
+
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+      - id: check-yaml
+      - id: check-json
+      - id: check-merge-conflict
+      - id: check-added-large-files
+        args: [--maxkb=500]
+
+  - repo: local
+    hooks:
+      - id: no-dashes
+        name: no em dashes or en dashes
+        entry: python tools/check_dashes.py
+        language: system
+        pass_filenames: false
+
+      - id: tables
+        name: markdown tables are well formed
+        entry: python tools/check_tables.py
+        language: system
+        pass_filenames: false
+
+      - id: numbers
+        name: published numbers match the measured ones
+        entry: python tools/check_numbers.py
+        language: system
+        pass_filenames: false
+
+      - id: results-current
+        name: the results page matches the metrics
+        entry: python tools/generate_results_doc.py --check
+        language: system
+        pass_filenames: false
+
+      - id: dependencies
+        name: declared dependencies are all used
+        entry: python tools/check_dependencies.py
+        language: system
+        pass_filenames: false
+
+      - id: commit-subject
+        name: commit subject style
+        entry: python tools/check_commit_subject.py
+        language: system
+        stages: [commit-msg]
