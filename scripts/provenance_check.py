@@ -11,6 +11,7 @@ Run from the repository root:
 
 from __future__ import annotations
 
+import argparse
 import json
 import re
 import subprocess
@@ -21,6 +22,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 
 PASS, WEAK, FAIL = "PASS", "WEAK", "FAIL"
+WAIVED = "WAIVED"
 CONVENTIONAL = re.compile(r"^(feat|fix|test|docs|ci|chore|refactor|perf|build)(\([a-z0-9_-]+\))?: .+")
 STATIC_STATUS_BADGE = re.compile(
     r"!\[[^\]]*\]\(https://img\.shields\.io/badge/[^)]*"
@@ -41,15 +43,31 @@ class Report:
     def add(self, name: str, verdict: str, note: str) -> None:
         self.rows.append((name, verdict, note))
 
-    def render(self) -> int:
+    def render(self, waived: set[str] | None = None) -> int:
+        """Print the audit and return the exit code.
+
+        A waived check still runs and is still printed, as WAIVED rather than
+        hidden. A check quietly dropped is worse than one that fails: a reader
+        cannot then tell a signal that passed from one nobody looks at any more.
+        """
+        waived = waived or set()
+        unknown = sorted(waived - {name for name, _, _ in self.rows})
         width = max(len(name) for name, _, _ in self.rows)
+        counts = Counter()
         for name, verdict, note in self.rows:
-            print(f"  {verdict:4s}  {name:<{width}}  {note}")
-        counts = Counter(verdict for _, verdict, _ in self.rows)
+            shown = WAIVED if (verdict == FAIL and name in waived) else verdict
+            counts[shown] += 1
+            suffix = "   [waived: see the workflow for the reason]" if shown == WAIVED else ""
+            print(f"  {shown:6s}  {name:<{width}}  {note}{suffix}")
         print(
-            f"\n  {counts[PASS]} pass, {counts[WEAK]} weak, {counts[FAIL]} fail "
-            f"across {len(self.rows)} provenance checks"
+            f"\n  {counts[PASS]} pass, {counts[WEAK]} weak, {counts[WAIVED]} waived, "
+            f"{counts[FAIL]} fail across {len(self.rows)} provenance checks"
         )
+        if unknown:
+            # A typo in --waive must not read as a pass. It would waive nothing
+            # while looking as though a decision had been recorded.
+            print(f"\n  --waive names no such check: {unknown}", file=sys.stderr)
+            return 1
         return 1 if counts[FAIL] else 0
 
 
@@ -414,6 +432,21 @@ def check_repo_metadata(report: Report) -> None:
 
 
 def main() -> int:
+    parser = argparse.ArgumentParser(description="Audit the repository's own provenance signals.")
+    parser.add_argument(
+        "--waive",
+        action="append",
+        default=[],
+        metavar="CHECK",
+        help=(
+            "record CHECK as a waived judgement call. It still runs and is still printed, but a "
+            "failure no longer changes the exit code. For a check that is a judgement about the "
+            "shape of the work rather than a defect in it. Naming a check that does not exist is "
+            "an error, so a typo cannot silently waive nothing."
+        ),
+    )
+    args = parser.parse_args()
+
     print("Provenance check: the signals a sceptic reads in the first thirty seconds\n")
     report = Report()
     check_history(report)
@@ -424,7 +457,7 @@ def main() -> int:
     check_community(report)
     check_house_style(report)
     check_repo_metadata(report)
-    return report.render()
+    return report.render(waived=set(args.waive))
 
 
 if __name__ == "__main__":
