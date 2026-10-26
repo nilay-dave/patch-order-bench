@@ -134,6 +134,24 @@ class TestFetching:
         assert EPSS_URL.startswith("https://epss.cyentia.com/")
         assert KEV_URL.startswith("https://www.cisa.gov/")
 
+    def test_the_suite_blocks_outbound_network(self):
+        """The guarantee every feeds test rests on, made explicit.
+
+        conftest.py blocks urllib.request.urlopen for the whole suite. Without
+        that, a test reaching a real feed passes in an egress restricted sandbox
+        and then behaves differently on a CI runner that has internet, which is
+        exactly how the fetch error test regressed. The stub raises a message of
+        its own, so this fails whether the fixture is removed (a real request
+        then succeeds, or raises a different error) rather than only when there
+        is genuinely no egress. It never touches the network: the stub raises
+        before any socket is opened, and the host does not resolve anyway.
+        """
+        import urllib.error
+        import urllib.request
+
+        with pytest.raises(urllib.error.URLError, match="blocked in the test suite"):
+            urllib.request.urlopen("https://example.invalid/", timeout=1)
+
     def test_a_fetch_failure_says_what_an_egress_restricted_environment_looks_like(self, tmp_path):
         """The message exists because this is the failure a reader of this
         repository is most likely to hit, and "URLError" alone does not tell

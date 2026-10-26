@@ -181,6 +181,10 @@ class TestCli:
         assert "realized_cvss_epss_rank_correlation" in document["realized"]
 
     def test_fetch_reports_the_feed_error_rather_than_a_traceback(self, tmp_path, capsys):
+        # The failure is forced by the autouse block_outbound_network fixture in
+        # conftest.py, not by the sandbox happening to lack egress. Before that
+        # fixture existed this exited 2 only where the network was blocked, and
+        # returned 0 (a real, successful fetch) on a CI runner with internet.
         assert main(["fetch", "--to", str(tmp_path / "feeds")]) == 2
         assert "feed error" in capsys.readouterr().err
 
