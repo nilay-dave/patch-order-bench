@@ -3,7 +3,7 @@
 ## Reporting a vulnerability
 
 Report privately through GitHub's
-[security advisory form](https://github.com/__GITHUB_USERNAME__/patch-order-bench/security/advisories/new)
+[security advisory form](https://github.com/nilay-dave/patch-order-bench/security/advisories/new)
 rather than in a public issue. You should get a first response within a week.
 
 ## Scope

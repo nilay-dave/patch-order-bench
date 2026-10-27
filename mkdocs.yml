@@ -1,8 +1,8 @@
 site_name: patch-order-bench
 site_description: A benchmark for the order a patch programme works in.
-site_url: https://__GITHUB_USERNAME__.github.io/patch-order-bench/
-repo_url: https://github.com/__GITHUB_USERNAME__/patch-order-bench
-repo_name: __GITHUB_USERNAME__/patch-order-bench
+site_url: https://nilay-dave.github.io/patch-order-bench/
+repo_url: https://github.com/nilay-dave/patch-order-bench
+repo_name: nilay-dave/patch-order-bench
 edit_uri: ""
 
 theme:

@@ -1,7 +1,7 @@
 # patch-order-bench
 
-[![CI](https://github.com/__GITHUB_USERNAME__/patch-order-bench/actions/workflows/ci.yml/badge.svg)](https://github.com/__GITHUB_USERNAME__/patch-order-bench/actions/workflows/ci.yml)
-[![coverage](https://img.shields.io/endpoint?url=https://__GITHUB_USERNAME__.github.io/patch-order-bench/badges/coverage.json)](https://__GITHUB_USERNAME__.github.io/patch-order-bench/)
+[![CI](https://github.com/nilay-dave/patch-order-bench/actions/workflows/ci.yml/badge.svg)](https://github.com/nilay-dave/patch-order-bench/actions/workflows/ci.yml)
+[![coverage](https://img.shields.io/endpoint?url=https://nilay-dave.github.io/patch-order-bench/badges/coverage.json)](https://nilay-dave.github.io/patch-order-bench/)
 [![PyPI](https://img.shields.io/pypi/v/patch-order-bench)](https://pypi.org/project/patch-order-bench/)
 [![python](https://img.shields.io/badge/python-3.11%2B-blue)](pyproject.toml)
 [![dependencies](https://img.shields.io/badge/runtime%20dependencies-2-green)](pyproject.toml)

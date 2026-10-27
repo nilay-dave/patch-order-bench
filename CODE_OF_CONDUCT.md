@@ -38,7 +38,7 @@ Examples of unacceptable behaviour:
 
 Instances of abusive, harassing, or otherwise unacceptable behaviour may be
 reported to the project maintainers through a
-[private security advisory](https://github.com/__GITHUB_USERNAME__/patch-order-bench/security/advisories/new),
+[private security advisory](https://github.com/nilay-dave/patch-order-bench/security/advisories/new),
 which is the private channel this repository has. All complaints will be
 reviewed and investigated promptly and fairly.
 

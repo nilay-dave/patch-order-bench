@@ -49,7 +49,7 @@ KEV_URL = "https://www.cisa.gov/sites/default/files/csv/known_exploited_vulnerab
 # A plain identifier rather than something that impersonates a browser. These
 # are public feeds offered for exactly this use, and a scraper pretending to be
 # Chrome is how a polite consumer becomes an abusive one.
-USER_AGENT = "patch-order-bench (https://github.com/__GITHUB_USERNAME__/patch-order-bench)"
+USER_AGENT = "patch-order-bench (https://github.com/nilay-dave/patch-order-bench)"
 TIMEOUT_SECONDS = 60
 
 
