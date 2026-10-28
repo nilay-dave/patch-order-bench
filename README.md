@@ -1,8 +1,6 @@
 # patch-order-bench
 
 [![CI](https://github.com/nilay-dave/patch-order-bench/actions/workflows/ci.yml/badge.svg)](https://github.com/nilay-dave/patch-order-bench/actions/workflows/ci.yml)
-[![coverage](https://img.shields.io/endpoint?url=https://nilay-dave.github.io/patch-order-bench/badges/coverage.json)](https://nilay-dave.github.io/patch-order-bench/)
-[![PyPI](https://img.shields.io/pypi/v/patch-order-bench)](https://pypi.org/project/patch-order-bench/)
 [![python](https://img.shields.io/badge/python-3.11%2B-blue)](pyproject.toml)
 [![dependencies](https://img.shields.io/badge/runtime%20dependencies-2-green)](pyproject.toml)
 [![licence](https://img.shields.io/badge/licence-MIT-green)](LICENSE)
@@ -25,7 +23,7 @@ pob columns findings.csv                      # see what the exporter called thi
 pob compare --csv findings.csv --map map.json # score all eight orderings
 ```
 
-## Every number published here is a simulation
+
 
 <!--number:headline.corpus.findings-->5,000<!--/number--> generated findings, not
 a real estate. The live feed path in `pob.feeds` reads EPSS and the CISA KEV
