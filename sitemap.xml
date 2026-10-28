@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+         <loc>https://nilay-dave.github.io/patch-order-bench/</loc>
+         <lastmod>2026-10-28</lastmod>
+    </url>
+    <url>
+         <loc>https://nilay-dave.github.io/patch-order-bench/limitations/</loc>
+         <lastmod>2026-10-28</lastmod>
+    </url>
+    <url>
+         <loc>https://nilay-dave.github.io/patch-order-bench/results/</loc>
+         <lastmod>2026-10-28</lastmod>
+    </url>
+    <url>
+         <loc>https://nilay-dave.github.io/patch-order-bench/sources/</loc>
+         <lastmod>2026-10-28</lastmod>
+    </url>
+    <url>
+         <loc>https://nilay-dave.github.io/patch-order-bench/adr/adr-001-exploitability-ordering/</loc>
+         <lastmod>2026-10-28</lastmod>
+    </url>
+    <url>
+         <loc>https://nilay-dave.github.io/patch-order-bench/adr/adr-002-no-persistence-layer/</loc>
+         <lastmod>2026-10-28</lastmod>
+    </url>
+    <url>
+         <loc>https://nilay-dave.github.io/patch-order-bench/adr/adr-003-simulation-methodology/</loc>
+         <lastmod>2026-10-28</lastmod>
+    </url>
+</urlset>
